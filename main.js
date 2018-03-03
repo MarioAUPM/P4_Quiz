@@ -9,10 +9,15 @@ const rl = readline.createInterface({
 rl.prompt();
 
 rl.on('line', (line) => {
-  switch (line.trim()) {
+
+  let args = line.split(" ");
+  let cmd = args[0].toLowerCase().trim();
+
+  switch (cmd) {
 
 
     case '':
+      rl.prompt();
       break;
 
     case 'help':
@@ -34,19 +39,19 @@ rl.on('line', (line) => {
       break;
 
     case 'show':
-      showCmd();
+      showCmd(args[1]);
       break;
 
     case 'delete':
-      deleteCmd();
+      deleteCmd(args[1]);
       break;
 
     case 'edit':
-      editCmd();
+      editCmd(args[1]);
       break;
 
     case 'test':
-      testCmd();
+      testCmd(args[1]);
       break;
 
     case 'play':
@@ -60,11 +65,11 @@ rl.on('line', (line) => {
 
 
     default:
-      console.log(`Comando desconocido: '${line.trim()}'`);
+      console.log(`Comando desconocido: '${cmd}'`);
       console.log(`Use help o h para ver los comandos disponibles.`);
+        rl.prompt();
       break;
   }
-  rl.prompt();
 })
 .on('close', () => {
   console.log('Adios!');
@@ -83,6 +88,7 @@ const helpCmd = () => {
     console.log(" p|play - Inicia el juego de preguntas aleatorias.");
     console.log(" credits - Muestra los créditos.");
     console.log(" q|quit - Salir de la aplicación.");
+    rl.prompt();
 }
 
 const quitCmd = () => {
@@ -91,34 +97,42 @@ const quitCmd = () => {
 
 const addCmd = () => {
     console.log("Añadir pregunta.");
+    rl.prompt();
 }
 
 const listCmd = () => {
     console.log("Mostrar lista de preguntas.");
+    rl.prompt();
 }
 
-const showCmd = () => {
+const showCmd = id => {
     console.log("Muestra la pregunta y la respuesta deseadas.");
+    rl.prompt();
 }
 
-const deleteCmd = () => {
+const deleteCmd = id => {
     console.log("Borra la pregunta deseada.");
+    rl.prompt();
 }
 
-const editCmd = () => {
+const editCmd = id => {
     console.log("Edita la pregunta deseada.");
+    rl.prompt();
 }
 
-const testCmd = () => {
+const testCmd = id => {
     console.log("Prueba la pregunta deseada.");
+    rl.prompt();
 }
 
 const playCmd = () => {
     console.log("Jugar al juego.");
+    rl.prompt();
 }
 
 const creditsCmd = () => {
     console.log("\nAutor:");
     console.log("Mario Arroyo Benito.\n");
+    rl.prompt();
 }
 
