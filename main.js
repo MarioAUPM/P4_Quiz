@@ -17,56 +17,45 @@ rl.on('line', (line) => {
 
     case 'help':
     case 'h':
-      console.log("\nCommandos:");
-      console.log(" h|help - Muestra el menú de ayuda.");
-      console.log(" list - Muestra la lista de quizzes existentes.");
-      console.log(" show <id> - Muestra la pregunta y la respuesta del quiz seleccionado.");
-      console.log(" add - Añade un nuevo quiz interactivamente.");
-      console.log(" delete <id> - Borra el quiz indicado.");
-      console.log(" edit <id> - Edita el quiz indicado.");
-      console.log(" test <id> - Prueba el test indicado.");
-      console.log(" p|play - Inicia el juego de preguntas aleatorias.");
-      console.log(" credits - Muestra los créditos.");
-      console.log(" q|quit - Salir de la aplicación.");
+      helpCmd();
       break;
 
     case 'quit':
     case 'q':
-      rl.close();
+      quitCmd();
       break;
 
     case 'add':
-      console.log("Añadir pregunta.");
+      addCmd();
       break;
 
     case 'list':
-      console.log("Mostrar lsita de preguntas.");
+      listCmd();
       break;
 
     case 'show':
-      console.log("Muestra la pregunta y la respuesta deseadas.");
+      showCmd();
       break;
 
     case 'delete':
-      console.log("Borra la pregunta deseada.");
+      deleteCmd();
       break;
 
     case 'edit':
-      console.log("Edita la pregunta deseada.");
+      editCmd();
       break;
 
     case 'test':
-      console.log("Prueba la pregunta deseada.");
+      testCmd();
       break;
 
     case 'play':
     case 'p':
-      console.log("Jugar al juego.");
+      playCmd();
       break;
 
     case 'credits':
-      console.log("\nAutor");
-      console.log("Mario Arroyo Benito.");
+      creditsCmd();
       break;
 
 
@@ -81,3 +70,55 @@ rl.on('line', (line) => {
   console.log('Adios!');
   process.exit(0);
 });
+
+const helpCmd = () => {
+    console.log("\nCommandos:");
+    console.log(" h|help - Muestra el menú de ayuda.");
+    console.log(" list - Muestra la lista de quizzes existentes.");
+    console.log(" show <id> - Muestra la pregunta y la respuesta del quiz seleccionado.");
+    console.log(" add - Añade un nuevo quiz interactivamente.");
+    console.log(" delete <id> - Borra el quiz indicado.");
+    console.log(" edit <id> - Edita el quiz indicado.");
+    console.log(" test <id> - Prueba el test indicado.");
+    console.log(" p|play - Inicia el juego de preguntas aleatorias.");
+    console.log(" credits - Muestra los créditos.");
+    console.log(" q|quit - Salir de la aplicación.");
+}
+
+const quitCmd = () => {
+    rl.close();
+}
+
+const addCmd = () => {
+    console.log("Añadir pregunta.");
+}
+
+const listCmd = () => {
+    console.log("Mostrar lista de preguntas.");
+}
+
+const showCmd = () => {
+    console.log("Muestra la pregunta y la respuesta deseadas.");
+}
+
+const deleteCmd = () => {
+    console.log("Borra la pregunta deseada.");
+}
+
+const editCmd = () => {
+    console.log("Edita la pregunta deseada.");
+}
+
+const testCmd = () => {
+    console.log("Prueba la pregunta deseada.");
+}
+
+const playCmd = () => {
+    console.log("Jugar al juego.");
+}
+
+const creditsCmd = () => {
+    console.log("\nAutor:");
+    console.log("Mario Arroyo Benito.\n");
+}
+
