@@ -150,7 +150,7 @@ exports.testCmd = (rl,id) => {
             rl.question(colorize('  Introduzca la respuesta: ', 'red'), answer => {
 
 
-                if(answer === quiz.answer){
+                if(answer.toLowerCase().trim() === quiz.answer.toLowerCase().trim()){
                     biglog(`Respuesta correcta`,'green');
                     rl.prompt();
                 }else{
