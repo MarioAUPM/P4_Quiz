@@ -1,0 +1,18 @@
+{
+  "name": "quiz",
+  "version": "1.0.0",
+  "description": "Practica 2 CORE, proyecto quiz",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "CORE",
+    "P2",
+    "quiz",
+    "node"
+  ],
+  "author": "Mario Arroyo Benito",
+  "license": "Unlicense"
+}
