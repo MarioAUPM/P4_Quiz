@@ -139,8 +139,34 @@ Prueba una pregunta existente
 @param id       identificador de la pregunta que se va a pobar
  */
 exports.testCmd = (rl,id) => {
-    log("Prueba la pregunta deseada.",'red');
-    rl.prompt();
+    if(typeof id === "undefined"){
+        errorlog(`Falta el parámetro`);
+        rl.prompt();
+    }else{
+        try{
+            const quiz = model.getByIndex(id);
+            log(quiz.question,'yellow');
+
+            rl.question(colorize('  Introduzca la respuesta: ', 'red'), answer => {
+
+
+                if(answer === quiz.answer){
+                    biglog(`Respuesta correcta`,'green');
+                    rl.prompt();
+                }else{
+                    console.log(0);
+                    biglog(`Respuesta incorrecta`,'red');
+                    rl.prompt();
+                }
+            });
+        }catch(error){
+            errorlog(error.message);
+            rl.prompt();
+
+        }
+    }
+
+
 };
 
 /*
