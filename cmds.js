@@ -154,7 +154,6 @@ exports.testCmd = (rl,id) => {
                     biglog(`Respuesta correcta`,'green');
                     rl.prompt();
                 }else{
-                    console.log(0);
                     biglog(`Respuesta incorrecta`,'red');
                     rl.prompt();
                 }
@@ -175,8 +174,55 @@ Inicia el modo de juego de preguntas aleatorias
 @param rl       Objeto readline para implementar en el CLI.
  */
 exports.playCmd = rl => {
-    log("Jugar al juego.",'red');
+
+    //let score = 0;
+    //let toBeResolved = [];
+    //for meter id
+    //if (vacio){ no hay nada que preguntar, resultado, puntos}
+    //Math.random*array.length
+    let score = 0;
+    toBeResolved = model.getAll();
+    const MAX_NUM = toBeResolved.length;
+
+    if(MAX_NUM<1){
+        errorlog("No hay preguntas.");
+    }
+    //Una vez se ha comprobado que haya más de 0 preguntas, se inicia el juego
+    const turno = () => {
+        if (toBeResolved.length === 0){
+            log("No hay nada mas que preguntar.");
+            log(`Fin del examen. Aciertos: ${score}`);
+            biglog(score,'magenta');
+            rl.prompt();
+            return;
+        } else {
+
+            let id = Math.floor(Math.random()*toBeResolved.length);
+            const quiz = toBeResolved[id];
+            toBeResolved.splice(id,1);
+            log(quiz.question,'yellow');
+            rl.question(colorize('  Introduzca la respuesta: ', 'red'), answer => {
+
+
+                if(answer.toLowerCase().trim() === quiz.answer.toLowerCase().trim()){
+                    score++;
+                    log(`CORRECTO - Lleva ${score} aciertos.`);
+                    turno();
+                    rl.prompt();
+                    return;
+                }else{
+                    log(`INCORRECTO`,'red');
+                    log(`Fin del juego. Aciertos: ${score}`);
+                    biglog(score,'magenta');
+                    rl.prompt();
+                    return;
+                }
+            });
+
+        }
+    }
     rl.prompt();
+    turno();
 };
 
 /*
