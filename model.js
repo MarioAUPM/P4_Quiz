@@ -61,7 +61,7 @@ const load = () => {
             quizzes = json;
         }
     })
-}
+};
 
 /*
 Guarda las preguntas en el fichero
@@ -76,7 +76,7 @@ const save = () => {
         err => {
             if (err) throw err;
         });
-}
+};
 
 /*
 Devuelve el número total de preguntas existentes.
@@ -160,7 +160,7 @@ exports.deleteByIndex = id => {
     }
     quizzes.splice(id, 1);
     save();
-}
+};
 
 //Carga los quizzes almacenados en el fichero
 load();
