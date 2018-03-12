@@ -209,34 +209,32 @@ Prueba una pregunta existente
 @param id       identificador de la pregunta que se va a pobar
  */
 exports.testCmd = (rl,id) => {
-    /*if(typeof id === "undefined"){
-        errorlog(`El valor del parámetro id no es válido`);
-        rl.prompt();
-    }else{
-        try{
-            const quiz = model.getByIndex(id);
 
-            rl.question(colorize(quiz.question + "? ", 'red'), answer => {
+    validateId(id)
+        .then(id => models.quiz.findById(id))
+        .then(quiz => {
+            if (!quiz) {
+                throw new Error(`No existe un quiz asociado al id=${id}.`);
+            }
+            log(` [${colorize(quiz.id, 'magenta')}]: ${quiz.question}`);
+            return makeQuestion(rl, 'Introduzca la respuesta: ')
+                .then(a => {
+                    if(quiz.answer.toLowerCase() === a.toLowerCase().trim()){
+                        log("Su respuesta es correcta");
+                        biglog('Correcta', 'green');
+                    } else{
+                        log("Su respuesta es incorrecta");
+                        biglog('Incorrecta', 'red');
+                    }
+                });
 
-
-                if(answer.toLowerCase().trim() === quiz.answer.toLowerCase().trim()){
-                    log("Su respuesta es correcta");
-                    biglog(`Correcta`,'green');
-                    rl.prompt();
-                }else{
-                    log("Su respuesta es incorrecta");
-                    biglog(`Incorrecta`,'red');
-                    rl.prompt();
-                }
-            });
-        }catch(error){
+        })
+        .catch(error => {
             errorlog(error.message);
+        })
+        .then(() => {
             rl.prompt();
-
-        }
-    }*/
-
-
+        });
 };
 
 /*
@@ -246,83 +244,50 @@ Inicia el modo de juego de preguntas aleatorias
  */
 exports.playCmd = rl => {
 
+    //variables
     let score = 0;
+    let toBeResolved = [];
 
-    let toBeResolved =[];
+    const turno = () => {
+        return new Promise((resolve,reject) => {
 
-    const turno =() => {
-        return new Promise((resolve, reject) => {
             if(toBeResolved.length <=0){
-                console.log(`No hay nada mas que preguntar.\nFin del juego. Aciertos: ${score}`);
-                biglog(score,'magenta');
+                console.log("No hay nada mas que preguntar.\nFin del examen. Aciertos:");
                 resolve();
-                rl.prompt();
                 return;
             }
-            let pos =  Math.floor(Math.random()*toBeResolved.length);
+            let pos = Math.floor(Math.random()*toBeResolved.length);
             let quiz = toBeResolved[pos];
             toBeResolved.splice(pos,1);
 
-            makeQuestion(rl, quiz.question)
-            .then(answer => {
-                if(answer.toLowerCase().trim() === quiz.answer.toLowerCase().trim()){
-                    score++;
-                    console.log(`CORRECTO - Lleva ${score} 'aciertos`);
-                    resolve(playOne());
-                }else{
-                    console.log(`INCORRECTO.\nFin del juego. Aciertos: ${score}`);
-                    biglog(score,'magenta');
-                    rl.prompt();
-                    resolve();
-                }
-            })
+            makeQuestion(rl, quiz.question+'? ')
+                .then(answer => {
+                    if(answer.toLowerCase().trim() === quiz.answer.toLowerCase().trim()){
+                        score++;
+                        console.log(`CORRECTO - Lleva ${score} aciertos`);
+                        resolve(turno());
+                    } else {
+                        console.log("INCORRECTO.\nFin del examen. Aciertos:");
+                        resolve();
+                    }
+                })
         })
     }
-    rl.prompt();
-    turno();
 
-    /*let score = 0;
-    toBeResolved = model.getAll();
-    const MAX_NUM = toBeResolved.length;
-
-    if(MAX_NUM<1){
-        errorlog("No hay preguntas.");
-    }
-    //Una vez se ha comprobado que haya más de 0 preguntas, se inicia el juego
-    const turno = () => {
-        if (toBeResolved.length === 0){
-            log("No hay nada más que preguntar.");
-            log(`Fin del juego. Aciertos: ${score}`);
+    models.quiz.findAll({raw: true})
+        .then(quizzes => {
+            toBeResolved = quizzes;
+        })
+        .then(() => {
+            return turno();
+        })
+        .catch(error => {
+            console.log(error);
+        })
+        .then(() => {
             biglog(score,'magenta');
             rl.prompt();
-            return;
-        } else {
-
-            let id = Math.floor(Math.random()*toBeResolved.length);
-            const quiz = toBeResolved[id];
-            toBeResolved.splice(id,1);
-            rl.question(colorize(quiz.question + "? ", 'red'), answer => {
-
-
-                if(answer.toLowerCase().trim() === quiz.answer.toLowerCase().trim()){
-                    score++;
-                    log(`CORRECTO - Lleva ${score} aciertos.`);
-                    turno();
-                    rl.prompt();
-                    return;
-                }else{
-                    log(`INCORRECTO.`);
-                    log(`Fin del juego. Aciertos: ${score}`);
-                    biglog(score,'magenta');
-                    rl.prompt();
-                    return;
-                }
-            });
-
-        }
-    }
-    rl.prompt();
-    turno();*/
+        })
 };
 
 /*
